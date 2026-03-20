@@ -2,8 +2,8 @@ import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { VALID_CATEGORIES } from '../lib/categories';
 
-export const GET: APIRoute = async ({ site }) => {
-  const siteUrl = site?.toString().replace(/\/$/, '') ?? 'https://devopsglossary.com';
+export const GET: APIRoute = async () => {
+  const siteUrl = import.meta.env.SITE?.replace(/\/$/, '') ?? 'https://devopsglossary.com';
   const terms = await getCollection('terms');
 
   const urls = [
