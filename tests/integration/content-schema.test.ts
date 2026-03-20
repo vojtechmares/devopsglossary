@@ -17,7 +17,7 @@ const termSchema = z.object({
     'practice',
     'observability',
   ]),
-  dateAdded: z.coerce.date().optional(),
+  dateAdded: z.coerce.date(),
 });
 
 describe('term content schema', () => {
@@ -41,12 +41,12 @@ describe('term content schema', () => {
       slug: 'test',
       description: 'A test term.',
       category: 'concept',
+      dateAdded: '2024-01-01',
     };
     const result = termSchema.parse(minimal);
     expect(result.relatedTerms).toEqual([]);
     expect(result.tags).toEqual([]);
     expect(result.abbreviation).toBeUndefined();
-    expect(result.dateAdded).toBeUndefined();
   });
 
   it('rejects description over 160 characters', () => {
@@ -72,6 +72,16 @@ describe('term content schema', () => {
   it('rejects missing required fields', () => {
     expect(() => termSchema.parse({})).toThrow();
     expect(() => termSchema.parse({ title: 'Test' })).toThrow();
+  });
+
+  it('rejects missing dateAdded', () => {
+    const invalid = {
+      title: 'Test',
+      slug: 'test',
+      description: 'A test term.',
+      category: 'concept',
+    };
+    expect(() => termSchema.parse(invalid)).toThrow();
   });
 
   it('coerces dateAdded string to Date', () => {

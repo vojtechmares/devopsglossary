@@ -1,0 +1,48 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TermCard from '../../components/TermCard.astro';
+import { isValidCategory, formatCategoryLabel } from '../../lib/categories';
+
+const { category } = Astro.params;
+
+if (!category || !isValidCategory(category)) {
+  Astro.response.status = 404;
+  return Astro.rewrite('/404');
+}
+
+const allTerms = await getCollection('terms');
+const categoryTerms = allTerms
+  .filter((t) => t.data.category === category)
+  .sort((a, b) => a.data.title.localeCompare(b.data.title));
+
+const label = formatCategoryLabel(category);
+---
+
+<BaseLayout
+  title={`${label} — DevOps Glossary`}
+  description={`Browse all ${label} terms in the DevOps Glossary.`}
+>
+  <div class="mb-6">
+    <div class="flex items-center gap-2 text-sm text-muted-foreground mb-2">
+      <a href="/" class="hover:text-foreground transition-colors">Home</a>
+      <span>/</span>
+      <span>{label}</span>
+    </div>
+    <h1 class="text-3xl font-bold">{label}</h1>
+    <p class="text-muted-foreground mt-2">{categoryTerms.length} terms in this category.</p>
+  </div>
+
+  <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+    {categoryTerms.map((term) => (
+      <TermCard
+        title={term.data.title}
+        slug={term.data.slug}
+        abbreviation={term.data.abbreviation}
+        description={term.data.description}
+        category={term.data.category}
+        tags={term.data.tags}
+      />
+    ))}
+  </div>
+</BaseLayout>

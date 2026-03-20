@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /og/
+Disallow: /_/
+
+Sitemap: https://devopsglossary.com/sitemap.xml

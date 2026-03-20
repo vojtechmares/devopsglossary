@@ -4,13 +4,15 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import RelatedTerms from '../../components/RelatedTerms.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import { generateDefinedTermSchema, generateBreadcrumbSchema } from '../../lib/seo';
+import { generateETag } from '../../lib/cache';
 
 const { slug } = Astro.params;
 const allTerms = await getCollection('terms');
 const term = allTerms.find((t) => t.data.slug === slug);
 
 if (!term) {
-  return Astro.redirect('/404');
+  Astro.response.status = 404;
+  return Astro.rewrite('/404');
 }
 
 const { Content } = await render(term);
@@ -23,19 +25,34 @@ const relatedTerms = term.data.relatedTerms
 
 const siteUrl = 'https://devopsglossary.com';
 
+const datePublished = term.data.dateAdded instanceof Date
+  ? term.data.dateAdded.toISOString().split('T')[0]
+  : undefined;
+
 const definedTermSchema = generateDefinedTermSchema({
   name: term.data.title,
   description: term.data.description,
   url: `${siteUrl}/glossary/${term.data.slug}`,
+  datePublished,
 });
 
 const breadcrumbSchema = generateBreadcrumbSchema([
   { name: 'Home', url: siteUrl },
-  { name: 'Glossary', url: `${siteUrl}` },
   { name: term.data.title, url: `${siteUrl}/glossary/${term.data.slug}` },
 ]);
 
 const jsonLd = [definedTermSchema, breadcrumbSchema];
+
+const pageContent = JSON.stringify({ slug: term.data.slug, title: term.data.title, description: term.data.description });
+const etag = await generateETag(pageContent);
+const ifNoneMatch = Astro.request.headers.get('If-None-Match');
+
+if (ifNoneMatch === etag) {
+  return new Response(null, { status: 304 });
+}
+
+Astro.response.headers.set('ETag', etag);
+Astro.response.headers.set('Cache-Control', 'public, max-age=3600, must-revalidate');
 ---
 
 <BaseLayout
@@ -44,6 +61,9 @@ const jsonLd = [definedTermSchema, breadcrumbSchema];
   ogImage={`/og/${term.data.slug}.png`}
   ogType="article"
   ogImageAlt={`${term.data.title} — DevOps Glossary`}
+  articlePublishedTime={datePublished}
+  articleSection={term.data.category}
+  articleTags={term.data.tags}
   jsonLd={jsonLd}
 >
   <div class="lg:grid lg:grid-cols-[1fr_280px] lg:gap-8">
@@ -72,6 +92,11 @@ const jsonLd = [definedTermSchema, breadcrumbSchema];
             </span>
           ))}
         </div>
+        {datePublished && (
+          <time datetime={datePublished} class="block text-xs text-muted-foreground mt-2">
+            Added {new Date(datePublished).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+          </time>
+        )}
       </header>
 
       <div class="prose prose-slate max-w-none">

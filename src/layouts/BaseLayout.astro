@@ -12,9 +12,12 @@ interface Props {
   ogType?: 'website' | 'article';
   ogImageAlt?: string;
   jsonLd?: object;
+  articlePublishedTime?: string;
+  articleSection?: string;
+  articleTags?: string[];
 }
 
-const { title, description, canonical, ogImage, ogType, ogImageAlt, jsonLd } = Astro.props;
+const { title, description, canonical, ogImage, ogType, ogImageAlt, jsonLd, articlePublishedTime, articleSection, articleTags } = Astro.props;
 ---
 
 <!doctype html>
@@ -28,11 +31,17 @@ const { title, description, canonical, ogImage, ogType, ogImageAlt, jsonLd } = A
       ogType={ogType}
       ogImageAlt={ogImageAlt}
       jsonLd={jsonLd}
+      articlePublishedTime={articlePublishedTime}
+      articleSection={articleSection}
+      articleTags={articleTags}
     />
   </head>
   <body class="min-h-screen flex flex-col bg-background text-foreground">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md">
+      Skip to content
+    </a>
     <Header />
-    <main class="flex-1 w-full max-w-6xl mx-auto px-4 py-8">
+    <main id="main-content" class="flex-1 w-full max-w-6xl mx-auto px-4 py-8">
       <slot />
     </main>
     <Footer />

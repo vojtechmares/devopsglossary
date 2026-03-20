@@ -19,7 +19,7 @@ const terms = defineCollection({
       'practice',
       'observability',
     ]),
-    dateAdded: z.coerce.date().optional(),
+    dateAdded: z.coerce.date(),
   }),
 });
 

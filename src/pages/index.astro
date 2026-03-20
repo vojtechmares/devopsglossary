@@ -4,7 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import AlphabetNav from '../components/AlphabetNav.astro';
 import TermCard from '../components/TermCard.astro';
 import AdSlot from '../components/AdSlot.astro';
-import { generateWebSiteSchema } from '../lib/seo';
+import { generateWebSiteSchema, generateDefinedTermSetSchema } from '../lib/seo';
 import { groupByLetter } from '../lib/utils';
 
 const allTerms = await getCollection('terms');
@@ -15,11 +15,25 @@ const sortedTerms = allTerms
 const grouped = groupByLetter(sortedTerms);
 const activeLetters = Array.from(grouped.keys()).sort();
 
-const jsonLd = generateWebSiteSchema({
+const siteUrl = 'https://devopsglossary.com';
+
+const webSiteSchema = generateWebSiteSchema({
   name: 'DevOps Glossary',
-  url: 'https://devopsglossary.com',
+  url: siteUrl,
   description: 'The Urban Dictionary for DevOps — a community-driven glossary of DevOps terms, tools, and concepts.',
 });
+
+const definedTermSetSchema = generateDefinedTermSetSchema({
+  name: 'DevOps Glossary Terms',
+  description: 'A comprehensive collection of DevOps, cloud, and infrastructure terms.',
+  terms: sortedTerms.map((term) => ({
+    name: term.title,
+    description: term.description,
+    url: `${siteUrl}/glossary/${term.slug}`,
+  })),
+});
+
+const jsonLd = [webSiteSchema, definedTermSetSchema];
 ---
 
 <BaseLayout
