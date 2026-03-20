@@ -29,3 +29,7 @@ body {
   color: var(--color-foreground);
   background-color: var(--color-background);
 }
+
+h1, h2, h3 {
+  @apply font-mono;
+}
