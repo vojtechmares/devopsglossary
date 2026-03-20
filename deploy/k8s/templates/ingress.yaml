@@ -5,6 +5,7 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
+    haproxy.org/ssl-redirect: "false"
     external-dns.alpha.kubernetes.io/target: "lbh.knowing-koala.k8s.vxm.cz"
     # nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
 spec:
