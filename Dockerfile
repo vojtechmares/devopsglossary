@@ -34,6 +34,7 @@ RUN adduser -D nodejs
 
 COPY --chown=nodejs:nodejs --from=prod-deps /app/node_modules ./node_modules
 COPY --chown=nodejs:nodejs --from=build /app/dist ./dist
+COPY --chown=nodejs:nodejs --from=build /app/src/assets/fonts ./src/assets/fonts
 
 EXPOSE 8080
 
