@@ -5,6 +5,7 @@ import AlphabetNav from '../components/AlphabetNav.astro';
 import TermCard from '../components/TermCard.astro';
 import AdSlot from '../components/AdSlot.astro';
 import { generateWebSiteSchema, generateDefinedTermSetSchema } from '../lib/seo';
+import Link from '../components/Link.tsx';
 import { groupByLetter } from '../lib/utils';
 import { VALID_CATEGORIES, formatCategoryLabel } from '../lib/categories';
 
@@ -55,7 +56,7 @@ const jsonLd = [webSiteSchema, definedTermSetSchema];
     <h1 class="text-3xl font-bold mb-3">DevOps Glossary</h1>
     <p class="text-muted-foreground max-w-2xl mx-auto">
       The Urban Dictionary for DevOps. A community-driven glossary of terms, tools, and concepts
-      for modern software delivery. <a href="https://github.com/vojtechmares/devopsglossary" class="text-primary hover:underline">Add a term via PR</a>.
+      for modern software delivery. <Link href="https://github.com/vojtechmares/devopsglossary">Add a term via PR</Link>.
     </p>
   </div>
 

@@ -1,18 +1,20 @@
 ---
+import Link from './Link.tsx';
+
 const year = new Date().getFullYear();
 ---
 
 <footer class="border-t border-border mt-auto">
   <div class="max-w-6xl mx-auto px-4 py-6 text-center text-sm text-muted-foreground">
-    <p>&copy; {year} <a href="https://www.mares.cz" class="text-primary hover:underline">Vojtěch Mareš</a>. Built with Astro.</p>
+    <p>&copy; {year} <Link href="https://www.mares.cz">Vojtěch Mareš</Link>. Built with Astro.</p>
     <p class="mt-1">
       Want to add a term?
-      <a href="https://github.com/vojtechmares/devopsglossary" class="text-primary hover:underline">
+      <Link href="https://github.com/vojtechmares/devopsglossary">
         Submit a PR
-      </a>
+      </Link>
     </p>
     <p class="mt-1">
-      <a href="/ads" class="text-primary hover:underline">Advertising</a>
+      <Link href="/ads">Advertising</Link>
     </p>
   </div>
 </footer>

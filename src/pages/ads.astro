@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Link from '../components/Link.tsx';
 ---
 
 <BaseLayout
@@ -28,7 +29,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <h2 class="text-xl font-semibold font-mono mb-2">Place a job posting</h2>
         <p class="text-muted-foreground">
           If you're hiring for a DevOps, SRE, platform engineering, or related role and want to reach our audience, get in touch at
-          <a href="mailto:iam@vojtechmares.com" class="text-primary hover:underline">iam@vojtechmares.com</a>.
+          <Link href="mailto:iam@vojtechmares.com">iam@vojtechmares.com</Link>.
         </p>
       </section>
     </div>
