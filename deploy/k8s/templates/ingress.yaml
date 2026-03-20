@@ -3,12 +3,15 @@ kind: Ingress
 metadata:
   name: {{ .Release.Name }}
   annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
     external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
-    haproxy.org/ssl-redirect: "false"
     external-dns.alpha.kubernetes.io/target: "lbh.knowing-koala.k8s.vxm.cz"
-    # nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
 spec:
   ingressClassName: haproxy
+  tls:
+    - hosts:
+        - {{ .Values.config.host | quote }}
+      secretName: {{ .Release.Name }}-ingress-tls
   rules:
     - host: {{ .Values.config.host | quote }}
       http:
