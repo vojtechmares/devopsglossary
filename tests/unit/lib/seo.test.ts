@@ -24,33 +24,6 @@ describe('generateDefinedTermSchema', () => {
     });
   });
 
-  it('includes datePublished when provided', () => {
-    const result = generateDefinedTermSchema({
-      name: 'Kubernetes',
-      description: 'Container orchestration platform.',
-      url: 'https://devopsglossary.com/glossary/kubernetes',
-      datePublished: '2024-01-15',
-    });
-
-    expect(result).toEqual({
-      '@context': 'https://schema.org',
-      '@type': 'DefinedTerm',
-      name: 'Kubernetes',
-      description: 'Container orchestration platform.',
-      url: 'https://devopsglossary.com/glossary/kubernetes',
-      datePublished: '2024-01-15',
-    });
-  });
-
-  it('omits datePublished key entirely when not provided', () => {
-    const result = generateDefinedTermSchema({
-      name: 'Kubernetes',
-      description: 'Container orchestration platform.',
-      url: 'https://devopsglossary.com/glossary/kubernetes',
-    });
-
-    expect(result).not.toHaveProperty('datePublished');
-  });
 });
 
 describe('generateWebSiteSchema', () => {

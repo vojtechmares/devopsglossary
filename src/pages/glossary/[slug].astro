@@ -33,7 +33,6 @@ const definedTermSchema = generateDefinedTermSchema({
   name: term.data.title,
   description: term.data.description,
   url: `${siteUrl}/glossary/${term.data.slug}`,
-  datePublished,
 });
 
 const breadcrumbSchema = generateBreadcrumbSchema([

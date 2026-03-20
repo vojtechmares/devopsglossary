@@ -2,7 +2,6 @@ export interface DefinedTermData {
   name: string;
   description: string;
   url: string;
-  datePublished?: string;
 }
 
 export interface WebSiteData {
@@ -23,19 +22,13 @@ export interface DefinedTermSetData {
 }
 
 export function generateDefinedTermSchema(data: DefinedTermData): object {
-  const schema: Record<string, unknown> = {
+  return {
     '@context': 'https://schema.org',
     '@type': 'DefinedTerm',
     name: data.name,
     description: data.description,
     url: data.url,
   };
-
-  if (data.datePublished !== undefined) {
-    schema.datePublished = data.datePublished;
-  }
-
-  return schema;
 }
 
 export function generateWebSiteSchema(data: WebSiteData): object {
