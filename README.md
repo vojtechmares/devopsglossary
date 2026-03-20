@@ -25,6 +25,7 @@ pnpm install
 pnpm dev          # Start dev server
 pnpm build        # Production build
 pnpm start        # Run production server
+pnpm new          # Create a new glossary term
 pnpm test         # Run tests
 pnpm test:watch   # Run tests in watch mode
 ```
@@ -46,7 +47,15 @@ deploy/k8s/           # Helm chart for Kubernetes deployment
 
 ## Adding a Glossary Term
 
-Create a new `.md` file in `src/data/terms/`:
+The easiest way to add a term is with the interactive script:
+
+```bash
+pnpm new
+```
+
+It will prompt for all required fields, validate your input, and generate the file.
+
+Alternatively, create a new `.md` file in `src/data/terms/` manually:
 
 ```markdown
 ---
