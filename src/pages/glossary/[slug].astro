@@ -5,6 +5,7 @@ import RelatedTerms from '../../components/RelatedTerms.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import { generateDefinedTermSchema, generateBreadcrumbSchema } from '../../lib/seo';
 import { generateETag } from '../../lib/cache';
+import { formatCategoryLabel } from '../../lib/categories';
 
 const { slug } = Astro.params;
 const allTerms = await getCollection('terms');
@@ -82,9 +83,9 @@ Astro.response.headers.set('Cache-Control', 'public, max-age=3600, must-revalida
           )}
         </h1>
         <div class="flex flex-wrap items-center gap-2 mt-3">
-          <span class="text-xs px-2 py-0.5 rounded-full bg-primary text-primary-foreground">
-            {term.data.category}
-          </span>
+          <a href={`/category/${term.data.category}`} class="text-xs px-2 py-0.5 rounded-full bg-primary text-primary-foreground hover:opacity-80 transition-opacity">
+            {formatCategoryLabel(term.data.category)}
+          </a>
           {term.data.tags.map((tag: string) => (
             <span class="text-xs px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">
               {tag}

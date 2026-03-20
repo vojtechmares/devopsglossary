@@ -6,11 +6,21 @@ import TermCard from '../components/TermCard.astro';
 import AdSlot from '../components/AdSlot.astro';
 import { generateWebSiteSchema, generateDefinedTermSetSchema } from '../lib/seo';
 import { groupByLetter } from '../lib/utils';
+import { VALID_CATEGORIES, formatCategoryLabel } from '../lib/categories';
 
 const allTerms = await getCollection('terms');
 const sortedTerms = allTerms
   .map((t) => t.data)
   .sort((a, b) => a.title.localeCompare(b.title));
+
+const categoryCounts = new Map<string, number>();
+for (const cat of VALID_CATEGORIES) {
+  categoryCounts.set(cat, 0);
+}
+for (const term of sortedTerms) {
+  const count = categoryCounts.get(term.category) ?? 0;
+  categoryCounts.set(term.category, count + 1);
+}
 
 const grouped = groupByLetter(sortedTerms);
 const activeLetters = Array.from(grouped.keys()).sort();
@@ -71,4 +81,19 @@ const jsonLd = [webSiteSchema, definedTermSetSchema];
       </div>
     </div>
   ))}
+
+  <section class="mt-12 mb-8">
+    <h2 class="text-xl font-bold mb-4 border-b border-border pb-2">Browse by Category</h2>
+    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {VALID_CATEGORIES.map((cat) => (
+        <a
+          href={`/category/${cat}`}
+          class="flex items-center justify-between rounded-lg border border-border p-4 hover:bg-accent transition-colors"
+        >
+          <span class="font-medium">{formatCategoryLabel(cat)}</span>
+          <span class="text-sm text-muted-foreground">{categoryCounts.get(cat)} terms</span>
+        </a>
+      ))}
+    </div>
+  </section>
 </BaseLayout>
