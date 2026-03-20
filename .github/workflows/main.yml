@@ -84,13 +84,13 @@ jobs:
           kubeconfig: ${{ secrets.KUBE_CONFIG_DATA }}
           kubeconfig-encoding: base64
 
-      - name: deploy to staging
+      - name: deploy to production
         id: helm_deploy
         continue-on-error: true
         shell: bash
         run: >
           helm upgrade --install glossary ./deploy/k8s
-          --namespace mareshq-websites-staging
+          --namespace mareshq-websites-production
           --wait
           --wait-for-jobs
           --values ./deploy/k8s/values.production.yaml
@@ -100,34 +100,34 @@ jobs:
         if: steps.helm_deploy.outcome == 'failure'
         run: |
           echo "::group::Helm Release Status"
-          helm status glossary --namespace mareshq-websites-staging --show-resources || true
+          helm status glossary --namespace mareshq-websites-production --show-resources || true
           echo "::endgroup::"
 
           echo "::group::Helm Release History"
-          helm history glossary --namespace mareshq-websites-staging || true
+          helm history glossary --namespace mareshq-websites-production || true
           echo "::endgroup::"
 
           echo "::group::Current Values"
-          helm get values glossary --namespace mareshq-websites-staging || true
+          helm get values glossary --namespace mareshq-websites-production || true
           echo "::endgroup::"
 
           echo "::group::Pod Status"
-          kubectl get pods -l app.kubernetes.io/name=devopsglossary-web --namespace mareshq-websites-staging -o wide || true
+          kubectl get pods -l app.kubernetes.io/name=devopsglossary-web --namespace mareshq-websites-production -o wide || true
           echo "::endgroup::"
 
           echo "::group::Pod Events"
-          kubectl get events --field-selector involvedObject.kind=Pod --sort-by='.lastTimestamp' --namespace mareshq-websites-staging | tail -30 || true
+          kubectl get events --field-selector involvedObject.kind=Pod --sort-by='.lastTimestamp' --namespace mareshq-websites-production | tail -30 || true
           echo "::endgroup::"
 
           echo "::group::Pod Logs (last 50 lines)"
-          for pod in $(kubectl get pods -l app.kubernetes.io/name=devopsglossary-web --namespace mareshq-websites-staging -o name 2>/dev/null); do
+          for pod in $(kubectl get pods -l app.kubernetes.io/name=devopsglossary-web --namespace mareshq-websites-production -o name 2>/dev/null); do
             echo "--- Logs for $pod ---"
-            kubectl logs $pod --tail=50 --all-containers=true --namespace mareshq-websites-staging || true
+            kubectl logs $pod --tail=50 --all-containers=true --namespace mareshq-websites-production || true
           done
           echo "::endgroup::"
 
           echo "::group::Deployment/Job Status"
-          kubectl describe deployment,job -l app.kubernetes.io/name=devopsglossary-web --namespace mareshq-websites-staging || true
+          kubectl describe deployment,job -l app.kubernetes.io/name=devopsglossary-web --namespace mareshq-websites-production || true
           echo "::endgroup::"
 
       - name: Fail the job if Helm deploy failed
