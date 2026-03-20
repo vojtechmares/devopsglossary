@@ -11,7 +11,7 @@ tags:
   - debugging
   - sre
 category: concept
-dateAdded: 2024-01-01
+dateAdded: 2026-03-20
 ---
 
 Monitoring tells you *when* something is broken. Observability tells you *why*. It's the holy trinity of system understanding: **logs** (what happened), **metrics** (how much), and **traces** (where it went).

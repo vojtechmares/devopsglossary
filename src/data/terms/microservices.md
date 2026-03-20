@@ -10,7 +10,7 @@ tags:
   - architecture
   - distributed-systems
 category: methodology
-dateAdded: 2024-01-01
+dateAdded: 2026-03-20
 ---
 
 The architectural pattern where you trade one big problem for fifty small ones that talk to each other over the network. Microservices break a monolithic application into independent services, each owning its own data and deploying independently.

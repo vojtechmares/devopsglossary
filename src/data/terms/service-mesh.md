@@ -10,7 +10,7 @@ tags:
   - infrastructure
   - istio
 category: concept
-dateAdded: 2024-01-01
+dateAdded: 2026-03-20
 ---
 
 When your microservices need a therapist to help them communicate. A service mesh is a dedicated infrastructure layer that handles service-to-service communication — traffic management, load balancing, encryption, observability, and fault tolerance.

@@ -10,7 +10,7 @@ tags:
   - metrics
   - alerting
 category: tool
-dateAdded: 2024-01-01
+dateAdded: 2026-03-20
 ---
 
 The monitoring system that watches your systems so you don't have to (but you still will, at 3 AM). Prometheus is a time-series database and monitoring toolkit that scrapes metrics from your services at regular intervals.

@@ -10,7 +10,7 @@ tags:
   - configuration-management
   - yaml
 category: tool
-dateAdded: 2024-01-01
+dateAdded: 2026-03-20
 ---
 
 The automation tool that runs on SSH and good vibes. Ansible is agentless — no daemon to install on target machines, no client to maintain. Just SSH access and a YAML playbook that describes what you want.

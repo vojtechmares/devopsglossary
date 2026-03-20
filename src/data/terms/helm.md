@@ -9,7 +9,7 @@ tags:
   - packaging
   - deployment
 category: tool
-dateAdded: 2024-01-01
+dateAdded: 2026-03-20
 ---
 
 Helm is the "apt-get" of Kubernetes. It lets you define, install, and upgrade complex Kubernetes applications using charts — pre-configured packages of Kubernetes resources.

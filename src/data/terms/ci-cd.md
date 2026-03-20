@@ -11,7 +11,7 @@ tags:
   - pipeline
   - deployment
 category: practice
-dateAdded: 2024-01-01
+dateAdded: 2026-03-20
 ---
 
 The holy grail of modern software delivery. CI/CD stands for Continuous Integration / Continuous Delivery (or Deployment, depending on who you ask and how brave they are).

@@ -11,7 +11,7 @@ tags:
   - sre
   - metrics
 category: concept
-dateAdded: 2024-01-01
+dateAdded: 2026-03-20
 ---
 
 The number that determines whether you sleep peacefully or get paged at 3 AM. An SLO (Service Level Objective) is a target for how well your service should perform — usually expressed as a percentage over a time window.

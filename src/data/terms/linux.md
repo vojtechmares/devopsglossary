@@ -9,7 +9,7 @@ tags:
   - open-source
   - kernel
 category: operating-system
-dateAdded: 2024-01-01
+dateAdded: 2026-03-20
 ---
 
 The operating system that runs everything except your desktop (probably). Linux is the open-source kernel created by Linus Torvalds in 1991 that now powers over 90% of the world's servers, all Android phones, most embedded devices, and basically the entire cloud.

@@ -9,7 +9,7 @@ tags:
   - automation
   - java
 category: tool
-dateAdded: 2024-01-01
+dateAdded: 2026-03-20
 ---
 
 The granddaddy of CI/CD tools. Jenkins has been automating builds since before "DevOps" was a buzzword. It's open-source, infinitely extensible via plugins, and runs on Java — which means it'll also eat all your RAM.

@@ -11,7 +11,7 @@ tags:
   - operations
   - google
 category: methodology
-dateAdded: 2024-01-01
+dateAdded: 2026-03-20
 ---
 
 What happens when you give a software engineer an ops pager. Site Reliability Engineering (SRE) is Google's answer to the question "what if we treated operations as a software problem?"

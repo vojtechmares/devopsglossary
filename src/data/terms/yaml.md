@@ -11,7 +11,7 @@ tags:
   - data-format
   - serialization
 category: concept
-dateAdded: 2024-01-01
+dateAdded: 2026-03-20
 ---
 
 YAML: the configuration format that's "human-readable" until you get the indentation wrong and spend an hour debugging a missing space. YAML (YAML Ain't Markup Language) is the lingua franca of DevOps configuration.

@@ -11,7 +11,7 @@ tags:
   - provisioning
   - hashicorp
 category: tool
-dateAdded: 2024-01-01
+dateAdded: 2026-03-20
 ---
 
 The tool that lets you destroy your entire cloud infrastructure with a single `terraform apply` — and also build it back. Terraform by HashiCorp uses declarative configuration files (HCL) to define infrastructure resources across any cloud provider.

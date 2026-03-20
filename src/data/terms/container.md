@@ -10,7 +10,7 @@ tags:
   - virtualization
   - isolation
 category: concept
-dateAdded: 2024-01-01
+dateAdded: 2026-03-20
 ---
 
 A container is like a VM's cooler, leaner cousin. It packages your application with its dependencies into an isolated unit that shares the host OS kernel. No guest OS overhead, no bloated disk images — just your app and what it needs.

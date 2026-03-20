@@ -9,7 +9,7 @@ tags:
   - containers
   - virtualization
 category: tool
-dateAdded: 2024-01-01
+dateAdded: 2026-03-20
 ---
 
 The tool that finally answered the age-old question: "But it works on my machine!" Docker packages your application and all its dependencies into a container — a lightweight, standalone, executable unit that runs the same everywhere.

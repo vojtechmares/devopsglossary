@@ -10,7 +10,7 @@ tags:
   - visualization
   - dashboards
 category: tool
-dateAdded: 2024-01-01
+dateAdded: 2026-03-20
 ---
 
 The tool that turns your metrics into beautiful dashboards that nobody looks at until something breaks. Grafana is an open-source visualization platform that connects to dozens of data sources — Prometheus, Elasticsearch, PostgreSQL, and more.

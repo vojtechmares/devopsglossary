@@ -11,7 +11,7 @@ tags:
   - orchestration
   - cloud-native
 category: platform
-dateAdded: 2024-01-01
+dateAdded: 2026-03-20
 ---
 
 The software that makes you feel like a genius when your pods are running and an absolute fraud when they're in CrashLoopBackOff. Kubernetes (K8s) is an open-source container orchestration system originally designed by Google, now maintained by the CNCF.

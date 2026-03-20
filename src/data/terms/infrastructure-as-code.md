@@ -11,7 +11,7 @@ tags:
   - automation
   - best-practices
 category: concept
-dateAdded: 2024-01-01
+dateAdded: 2026-03-20
 ---
 
 The radical idea that your infrastructure should be version-controlled, reviewable, and reproducible — just like your application code. Instead of clicking through cloud consoles like a caffeinated squirrel, you write config files that describe your desired state.

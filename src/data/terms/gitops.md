@@ -10,7 +10,7 @@ tags:
   - deployment
   - automation
 category: methodology
-dateAdded: 2024-01-01
+dateAdded: 2026-03-20
 ---
 
 The philosophy that if it's not in Git, it doesn't exist. GitOps takes Infrastructure as Code to its logical conclusion: Git is the single source of truth, and all changes to infrastructure and applications are made through Git commits and pull requests.
