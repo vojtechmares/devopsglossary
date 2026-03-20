@@ -1,0 +1,29 @@
+---
+import AdSlot from './AdSlot.astro';
+import SearchIndex from './SearchIndex.astro';
+import SearchDialog from './SearchDialog.tsx';
+---
+
+<header class="border-b border-border">
+  <SearchIndex />
+  <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between md:grid md:grid-cols-3">
+    <a href="/" class="text-xl font-bold text-foreground hover:text-primary transition-colors">
+      DevOps Glossary
+    </a>
+    <div class="hidden md:flex justify-center">
+      <SearchDialog client:load />
+    </div>
+    <div class="flex items-center gap-4 md:justify-end">
+      <div class="md:hidden">
+        <SearchDialog client:load />
+      </div>
+      <a
+        href="https://github.com"
+        class="text-sm text-muted-foreground hover:text-foreground transition-colors"
+      >
+        Contribute
+      </a>
+    </div>
+  </div>
+  <AdSlot placement="header" />
+</header>

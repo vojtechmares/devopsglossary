@@ -1,0 +1,17 @@
+---
+import { getCollection } from 'astro:content';
+
+const allTerms = await getCollection('terms');
+const searchIndex = allTerms.map((term) => ({
+  title: term.data.title,
+  slug: term.data.slug,
+  abbreviation: term.data.abbreviation,
+  description: term.data.description,
+  tags: term.data.tags,
+  category: term.data.category,
+}));
+---
+
+<script define:vars={{ searchIndex }}>
+  window.__SEARCH_INDEX__ = searchIndex;
+</script>

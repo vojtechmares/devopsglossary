@@ -1,17 +1,60 @@
 ---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AlphabetNav from '../components/AlphabetNav.astro';
+import TermCard from '../components/TermCard.astro';
+import AdSlot from '../components/AdSlot.astro';
+import { generateWebSiteSchema } from '../lib/seo';
+import { groupByLetter } from '../lib/utils';
 
+const allTerms = await getCollection('terms');
+const sortedTerms = allTerms
+  .map((t) => t.data)
+  .sort((a, b) => a.title.localeCompare(b.title));
+
+const grouped = groupByLetter(sortedTerms);
+const activeLetters = Array.from(grouped.keys()).sort();
+
+const jsonLd = generateWebSiteSchema({
+  name: 'DevOps Glossary',
+  url: 'https://devopsglossary.com',
+  description: 'The Urban Dictionary for DevOps — a community-driven glossary of DevOps terms, tools, and concepts.',
+});
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout
+  title="DevOps Glossary — The Urban Dictionary for DevOps"
+  description="A community-driven glossary of DevOps terms, tools, and concepts. From CI/CD to Kubernetes, learn the language of modern software delivery."
+  jsonLd={jsonLd}
+>
+  <div class="text-center mb-10">
+    <h1 class="text-3xl font-bold mb-3">DevOps Glossary</h1>
+    <p class="text-muted-foreground max-w-2xl mx-auto">
+      The Urban Dictionary for DevOps. A community-driven glossary of terms, tools, and concepts
+      for modern software delivery. <a href="https://github.com" class="text-primary hover:underline">Add a term via PR</a>.
+    </p>
+  </div>
+
+  <AlphabetNav activeLetters={activeLetters} />
+
+  {Array.from(grouped.entries()).map(([letter, terms], index) => (
+    <div>
+      {index > 0 && index % 3 === 0 && <AdSlot placement="inline" />}
+      <div id={`letter-${letter}`} class="mb-8">
+        <h2 class="text-xl font-bold mb-4 border-b border-border pb-2">{letter}</h2>
+        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {terms.map((term) => (
+            <TermCard
+              title={term.title}
+              slug={term.slug}
+              abbreviation={term.abbreviation}
+              description={term.description}
+              category={term.category}
+              tags={term.tags}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  ))}
+</BaseLayout>
