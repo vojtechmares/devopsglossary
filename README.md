@@ -1,43 +1,103 @@
-# Astro Starter Kit: Minimal
+# DevOps Glossary
 
-```sh
-pnpm create astro@latest -- --template minimal
+The Urban Dictionary for DevOps — a curated glossary of 108+ DevOps terms, explained with clarity and a bit of personality.
+
+**Live site:** [devopsglossary.com](https://devopsglossary.com)
+
+## Tech Stack
+
+- [Astro](https://astro.build) — static site generation with on-demand rendering
+- [React](https://react.dev) — interactive UI components
+- [TypeScript](https://www.typescriptlang.org) — type safety
+- [Tailwind CSS v4](https://tailwindcss.com) — styling
+- [Vitest](https://vitest.dev) — testing
+- Custom Node.js server (`@astrojs/node` adapter)
+
+## Prerequisites
+
+- Node.js >= 22.12.0
+- [pnpm](https://pnpm.io)
+
+## Getting Started
+
+```bash
+pnpm install
+pnpm dev          # Start dev server
+pnpm build        # Production build
+pnpm start        # Run production server
+pnpm test         # Run tests
+pnpm test:watch   # Run tests in watch mode
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Project Structure
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```
+src/
+├── components/       # React and Astro components
+├── content.config.ts # Content collection schema
+├── data/terms/       # Glossary term files (.md)
+├── layouts/          # Page layouts
+├── pages/            # Astro routes
+├── server.ts         # Custom Node.js server
+└── styles/           # Global styles
+deploy/k8s/           # Helm chart for Kubernetes deployment
+.github/workflows/    # CI/CD pipeline
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Adding a Glossary Term
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+Create a new `.md` file in `src/data/terms/`:
 
-Any static assets, like images, can be placed in the `public/` directory.
+```markdown
+---
+title: My Term
+slug: my-term
+description: "A short description (max 160 characters)."
+relatedTerms:
+  - some-other-term
+tags:
+  - relevant-tag
+category: tool
+dateAdded: 2026-01-01
+---
 
-## 🧞 Commands
+Your explanation here. Be clear, be useful, have fun with it.
+```
 
-All commands are run from the root of the project, from a terminal:
+### Frontmatter Fields
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+| Field | Required | Description |
+|---|---|---|
+| `title` | Yes | Display name |
+| `slug` | Yes | URL path segment |
+| `description` | Yes | Short description (max 160 chars, used for SEO) |
+| `abbreviation` | No | Common abbreviation (e.g., "K8s") |
+| `relatedTerms` | No | Array of slugs linking to other terms |
+| `tags` | No | Array of tags for categorization |
+| `category` | Yes | One of: `methodology`, `tool`, `platform`, `concept`, `operating-system`, `practice`, `observability` |
+| `dateAdded` | No | Date the term was added |
 
-## 👀 Want to learn more?
+## Deployment
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+### Docker
+
+```bash
+docker build -t devopsglossary .
+docker run -p 8080:8080 devopsglossary
+```
+
+### Kubernetes
+
+A Helm chart is provided in `deploy/k8s/`:
+
+```bash
+helm install devopsglossary deploy/k8s/ -f deploy/k8s/values.production.yaml
+```
+
+### CI/CD
+
+GitHub Actions workflow in `.github/workflows/main.yml` handles build and deployment.
+
+## License
+
+[MIT](LICENSE)
