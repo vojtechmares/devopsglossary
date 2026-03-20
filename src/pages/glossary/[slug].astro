@@ -44,6 +44,9 @@ const jsonLd = [definedTermSchema, breadcrumbSchema];
 <BaseLayout
   title={`${term.data.title}${term.data.abbreviation ? ` (${term.data.abbreviation})` : ''} — DevOps Glossary`}
   description={term.data.description}
+  ogImage={`/og/${term.data.slug}.png`}
+  ogType="article"
+  ogImageAlt={`${term.data.title} — DevOps Glossary`}
   jsonLd={jsonLd}
 >
   <div class="lg:grid lg:grid-cols-[1fr_280px] lg:gap-8">

@@ -9,10 +9,12 @@ interface Props {
   description: string;
   canonical?: string;
   ogImage?: string;
+  ogType?: 'website' | 'article';
+  ogImageAlt?: string;
   jsonLd?: object;
 }
 
-const { title, description, canonical, ogImage, jsonLd } = Astro.props;
+const { title, description, canonical, ogImage, ogType, ogImageAlt, jsonLd } = Astro.props;
 ---
 
 <!doctype html>
@@ -23,6 +25,8 @@ const { title, description, canonical, ogImage, jsonLd } = Astro.props;
       description={description}
       canonical={canonical}
       ogImage={ogImage}
+      ogType={ogType}
+      ogImageAlt={ogImageAlt}
       jsonLd={jsonLd}
     />
   </head>
