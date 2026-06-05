@@ -1,0 +1,6 @@
+import type { VercelConfig } from '@vercel/config/v1';
+
+export const config: VercelConfig = {
+  regions: ['fra1', 'iad1'],
+  fluid: true,
+};

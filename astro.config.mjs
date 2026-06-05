@@ -3,14 +3,17 @@ import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import mdx from '@astrojs/mdx';
 import tailwindcss from '@tailwindcss/vite';
-import node from '@astrojs/node';
+import vercel from '@astrojs/vercel';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://devopsglossary.com',
   output: 'server',
   trailingSlash: 'never',
-  adapter: node({ mode: 'middleware' }),
+  adapter: vercel({
+    imageService: true,
+    devImageService: 'sharp',
+  }),
   integrations: [react(), mdx()],
   vite: {
     plugins: [tailwindcss()],

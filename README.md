@@ -11,7 +11,7 @@ The Urban Dictionary for DevOps — a curated glossary of 108+ DevOps terms, exp
 - [TypeScript](https://www.typescriptlang.org) — type safety
 - [Tailwind CSS v4](https://tailwindcss.com) — styling
 - [Vitest](https://vitest.dev) — testing
-- Custom Node.js server (`@astrojs/node` adapter)
+- [Vercel](https://vercel.com) — hosting (`@astrojs/vercel` adapter)
 
 ## Prerequisites
 
@@ -24,7 +24,7 @@ The Urban Dictionary for DevOps — a curated glossary of 108+ DevOps terms, exp
 pnpm install
 pnpm dev          # Start dev server
 pnpm build        # Production build
-pnpm start        # Run production server
+pnpm preview      # Preview the production build locally
 pnpm new          # Create a new glossary term
 pnpm test         # Run tests
 pnpm test:watch   # Run tests in watch mode
@@ -39,10 +39,9 @@ src/
 ├── data/terms/       # Glossary term files (.md)
 ├── layouts/          # Page layouts
 ├── pages/            # Astro routes
-├── server.ts         # Custom Node.js server
 └── styles/           # Global styles
-deploy/k8s/           # Helm chart for Kubernetes deployment
-.github/workflows/    # CI/CD pipeline
+vercel.ts             # Vercel project configuration (regions, fluid compute)
+.github/workflows/    # CI (lint and test)
 ```
 
 ## Adding a Glossary Term
@@ -88,24 +87,16 @@ Your explanation here. Be clear, be useful, have fun with it.
 
 ## Deployment
 
-### Docker
+The site is hosted on [Vercel](https://vercel.com) using the `@astrojs/vercel`
+adapter. Deployments happen automatically via Vercel's Git integration: pushes to
+`main` ship to production, and pull requests get preview deployments.
 
-```bash
-docker build -t devopsglossary .
-docker run -p 8080:8080 devopsglossary
-```
+Project configuration lives in `vercel.ts` — functions run in `fra1` and `iad1`
+with Fluid Compute enabled. Images are served through Vercel Image Optimization in
+production (and `sharp` locally in dev).
 
-### Kubernetes
-
-A Helm chart is provided in `deploy/k8s/`:
-
-```bash
-helm install devopsglossary deploy/k8s/ -f deploy/k8s/values.production.yaml
-```
-
-### CI/CD
-
-GitHub Actions workflow in `.github/workflows/main.yml` handles build and deployment.
+GitHub Actions (`.github/workflows/ci.yml`) runs the build and test suite on every
+push and pull request.
 
 ## License
 
