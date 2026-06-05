@@ -28,7 +28,16 @@ const jobs = defineCollection({
   schema: z.object({
     title: z.string(),
     company: z.string(),
-    url: z.string().url(),
+    url: z
+      .string()
+      .url()
+      .refine((u) => {
+        try {
+          return new URL(u).protocol === 'https:';
+        } catch {
+          return false;
+        }
+      }, 'URL must use https'),
     location: z.string().optional(),
     description: z.string().max(120).optional(),
     postedAt: z.coerce.date(),
