@@ -1,9 +1,12 @@
 ---
+import type { Job } from '../lib/jobs';
+
 interface Props {
-  placement: 'header' | 'sidebar' | 'inline';
+  job?: Job;
+  placement?: 'header' | 'sidebar' | 'inline';
 }
 
-const { placement } = Astro.props;
+const { job, placement = 'inline' } = Astro.props;
 
 const placementStyles: Record<string, string> = {
   header: 'w-full',
@@ -12,10 +15,19 @@ const placementStyles: Record<string, string> = {
 };
 ---
 
-<div
-  class={`border border-dashed border-border rounded-lg p-4 text-center ${placementStyles[placement]}`}
-  data-ad-slot={placement}
->
-  <p class="text-xs text-muted-foreground uppercase tracking-wide">Sponsored</p>
-  <p class="text-sm text-muted-foreground mt-1">Your job posting here</p>
-</div>
+{job && (
+  <a
+    href={job.url}
+    target="_blank"
+    rel="sponsored noopener noreferrer"
+    class={`block border border-border rounded-lg p-4 hover:bg-accent transition-colors ${placementStyles[placement]}`}
+    data-ad-slot={placement}
+  >
+    <p class="text-xs text-muted-foreground uppercase tracking-wide">Sponsored</p>
+    <p class="text-sm font-semibold text-foreground mt-1">{job.title}</p>
+    <p class="text-sm text-muted-foreground">
+      {job.company}{job.location ? ` · ${job.location}` : ''}
+    </p>
+    {job.description && <p class="text-sm text-muted-foreground mt-1">{job.description}</p>}
+  </a>
+)}

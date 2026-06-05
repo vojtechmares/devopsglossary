@@ -23,4 +23,17 @@ const terms = defineCollection({
   }),
 });
 
-export const collections = { terms };
+const jobs = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/data/jobs' }),
+  schema: z.object({
+    title: z.string(),
+    company: z.string(),
+    url: z.string().url(),
+    location: z.string().optional(),
+    description: z.string().max(120).optional(),
+    postedAt: z.coerce.date(),
+    expiresAt: z.coerce.date().optional(),
+  }),
+});
+
+export const collections = { terms, jobs };

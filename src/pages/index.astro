@@ -8,8 +8,10 @@ import { generateWebSiteSchema, generateDefinedTermSetSchema } from '../lib/seo'
 import Link from '../components/Link.tsx';
 import { groupByLetter } from '../lib/utils';
 import { VALID_CATEGORIES, formatCategoryLabel } from '../lib/categories';
+import { getActiveJobs, pickJobForIndex } from '../lib/jobs';
 
 const allTerms = await getCollection('terms');
+const jobs = await getActiveJobs();
 const sortedTerms = allTerms
   .map((t) => t.data)
   .sort((a, b) => a.title.localeCompare(b.title));
@@ -64,7 +66,9 @@ const jsonLd = [webSiteSchema, definedTermSetSchema];
 
   {Array.from(grouped.entries()).map(([letter, terms], index) => (
     <div>
-      {index > 0 && index % 3 === 0 && <AdSlot placement="inline" />}
+      {index > 0 && index % 3 === 0 && jobs.length > 0 && (
+        <AdSlot job={pickJobForIndex(jobs, index / 3 - 1)} placement="inline" />
+      )}
       <div id={`letter-${letter}`} class="mb-8">
         <h2 class="text-xl font-bold mb-4 border-b border-border pb-2">{letter}</h2>
         <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
