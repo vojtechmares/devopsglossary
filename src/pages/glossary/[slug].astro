@@ -2,16 +2,13 @@
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import RelatedTerms from '../../components/RelatedTerms.astro';
-import AdSlot from '../../components/AdSlot.astro';
 import { generateDefinedTermSchema, generateBreadcrumbSchema } from '../../lib/seo';
 import { generateETag } from '../../lib/cache';
 import { formatCategoryLabel } from '../../lib/categories';
-import { getActiveJobs, pickJobForIndex, slugIndex } from '../../lib/jobs';
 import Link from '../../components/Link.tsx';
 
 const { slug } = Astro.params;
 const allTerms = await getCollection('terms');
-const jobs = await getActiveJobs();
 const term = allTerms.find((t) => t.data.slug === slug);
 
 if (!term) {
@@ -106,9 +103,6 @@ Astro.response.headers.set('Cache-Control', 'public, max-age=3600, must-revalida
         <Content />
       </div>
 
-      {jobs.length > 0 && (
-        <AdSlot job={pickJobForIndex(jobs, slugIndex(slug ?? '', jobs.length))} placement="inline" />
-      )}
       <RelatedTerms terms={relatedTerms} />
     </article>
 
