@@ -2,36 +2,39 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import TermCard from '../components/TermCard.astro';
+import type { SearchItem } from '../lib/search';
 
-const query = Astro.url.searchParams.get('q')?.trim() ?? '';
 const allTerms = await getCollection('terms');
 const sortedTerms = allTerms
   .map((t) => t.data)
   .sort((a, b) => a.title.localeCompare(b.title));
 
-const filteredTerms = query
-  ? sortedTerms.filter(
-      (t) =>
-        t.title.toLowerCase().includes(query.toLowerCase()) ||
-        t.description.toLowerCase().includes(query.toLowerCase()) ||
-        t.tags.some((tag) => tag.toLowerCase().includes(query.toLowerCase()))
-    )
-  : sortedTerms;
+const searchItems: SearchItem[] = sortedTerms.map((t) => ({
+  title: t.title,
+  slug: t.slug,
+  abbreviation: t.abbreviation,
+  description: t.description,
+  tags: t.tags,
+  category: t.category,
+}));
+
+// Escape `<` so the embedded JSON can never break out of the <script> tag.
+const searchData = JSON.stringify(searchItems).replace(/</g, '\\u003c');
 ---
 
 <BaseLayout
-  title={query ? `Search: ${query} — DevOps Glossary` : 'Search — DevOps Glossary'}
+  title="Search — DevOps Glossary"
   description="Search the DevOps Glossary for terms, tools, and concepts."
 >
   <div class="mb-8">
     <h1 class="text-3xl font-bold mb-4">Search</h1>
-    <form action="/search" method="get" class="flex gap-2">
+    <form action="/search" method="get" class="flex gap-2" data-search-form>
       <input
         type="search"
         name="q"
-        value={query}
         placeholder="Search terms..."
         class="flex-1 px-4 py-2 rounded-md border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+        data-search-input
       />
       <button
         type="submit"
@@ -42,22 +45,91 @@ const filteredTerms = query
     </form>
   </div>
 
-  {query && (
-    <p class="text-sm text-muted-foreground mb-4">
-      {filteredTerms.length} result{filteredTerms.length !== 1 ? 's' : ''} for "{query}"
-    </p>
-  )}
+  <p class="text-sm text-muted-foreground mb-4 hidden" data-search-count></p>
 
-  <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-    {filteredTerms.map((term) => (
-      <TermCard
-        title={term.title}
-        slug={term.slug}
-        abbreviation={term.abbreviation}
-        description={term.description}
-        category={term.category}
-        tags={term.tags}
-      />
+  <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3" data-search-results>
+    {sortedTerms.map((term) => (
+      <div data-slug={term.slug}>
+        <TermCard
+          title={term.title}
+          slug={term.slug}
+          abbreviation={term.abbreviation}
+          description={term.description}
+          category={term.category}
+          tags={term.tags}
+        />
+      </div>
     ))}
   </div>
+
+  <p class="text-sm text-muted-foreground hidden" data-search-empty>No results found.</p>
+
+  <script id="search-data" type="application/json" is:inline set:html={searchData}></script>
+
+  <script>
+    import { search, type SearchItem } from '../lib/search';
+
+    const dataEl = document.getElementById('search-data');
+    const items: SearchItem[] = dataEl ? JSON.parse(dataEl.textContent ?? '[]') : [];
+
+    const form = document.querySelector<HTMLFormElement>('[data-search-form]');
+    const input = document.querySelector<HTMLInputElement>('[data-search-input]');
+    const results = document.querySelector<HTMLElement>('[data-search-results]');
+    const countEl = document.querySelector<HTMLElement>('[data-search-count]');
+    const emptyEl = document.querySelector<HTMLElement>('[data-search-empty]');
+
+    // Map slug -> card wrapper, preserving the initial (alphabetical) order.
+    const cards = new Map<string, HTMLElement>();
+    if (results) {
+      for (const el of Array.from(results.children)) {
+        const slug = (el as HTMLElement).dataset.slug;
+        if (slug) cards.set(slug, el as HTMLElement);
+      }
+    }
+
+    function apply(query: string) {
+      if (!results) return;
+      const q = query.trim();
+
+      if (!q) {
+        for (const el of cards.values()) {
+          el.classList.remove('hidden');
+          results.appendChild(el);
+        }
+        countEl?.classList.add('hidden');
+        emptyEl?.classList.add('hidden');
+        return;
+      }
+
+      const matches = search(items, q);
+      const matchedSlugs = new Set(matches.map((m) => m.slug));
+
+      for (const [slug, el] of cards) {
+        el.classList.toggle('hidden', !matchedSlugs.has(slug));
+      }
+      // Reorder visible cards by relevance score.
+      for (const m of matches) {
+        const el = cards.get(m.slug);
+        if (el) results.appendChild(el);
+      }
+
+      if (countEl) {
+        countEl.textContent = `${matches.length} result${matches.length !== 1 ? 's' : ''} for "${q}"`;
+        countEl.classList.remove('hidden');
+      }
+      emptyEl?.classList.toggle('hidden', matches.length > 0);
+    }
+
+    if (input) {
+      const initial = new URLSearchParams(window.location.search).get('q') ?? '';
+      if (initial) input.value = initial;
+      apply(input.value);
+      input.addEventListener('input', () => apply(input.value));
+    }
+
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      apply(input?.value ?? '');
+    });
+  </script>
 </BaseLayout>

@@ -5,7 +5,13 @@ import { Resvg } from '@resvg/resvg-js';
 import { loadFonts } from '../../lib/og-fonts';
 import { buildTermOgImage, buildDefaultOgImage } from '../../lib/og-template';
 
-export const prerender = false;
+export async function getStaticPaths() {
+  const terms = await getCollection('terms');
+  return [
+    { params: { slug: 'default' } },
+    ...terms.map((term) => ({ params: { slug: term.data.slug } })),
+  ];
+}
 
 export const GET: APIRoute = async ({ params }) => {
   try {

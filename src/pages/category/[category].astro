@@ -2,15 +2,16 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TermCard from '../../components/TermCard.astro';
-import { isValidCategory, formatCategoryLabel } from '../../lib/categories';
+import { VALID_CATEGORIES, formatCategoryLabel } from '../../lib/categories';
 import Link from '../../components/Link.tsx';
 
-const { category } = Astro.params;
-
-if (!category || !isValidCategory(category)) {
-  Astro.response.status = 404;
-  return Astro.rewrite('/404');
+export function getStaticPaths() {
+  return VALID_CATEGORIES.map((category) => ({
+    params: { category },
+  }));
 }
+
+const { category } = Astro.params;
 
 const allTerms = await getCollection('terms');
 const categoryTerms = allTerms

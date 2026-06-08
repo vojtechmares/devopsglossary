@@ -3,26 +3,28 @@ import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import RelatedTerms from '../../components/RelatedTerms.astro';
 import { generateDefinedTermSchema, generateBreadcrumbSchema } from '../../lib/seo';
-import { generateETag } from '../../lib/cache';
 import { formatCategoryLabel } from '../../lib/categories';
 import Link from '../../components/Link.tsx';
 
-const { slug } = Astro.params;
-const allTerms = await getCollection('terms');
-const term = allTerms.find((t) => t.data.slug === slug);
-
-if (!term) {
-  Astro.response.status = 404;
-  return Astro.rewrite('/404');
+export async function getStaticPaths() {
+  const allTerms = await getCollection('terms');
+  return allTerms.map((term) => {
+    const relatedTerms = term.data.relatedTerms
+      .map((slug: string) => {
+        const found = allTerms.find((t) => t.data.slug === slug);
+        return found ? { slug: found.data.slug, title: found.data.title } : null;
+      })
+      .filter(Boolean) as Array<{ slug: string; title: string }>;
+    return {
+      params: { slug: term.data.slug },
+      props: { term, relatedTerms },
+    };
+  });
 }
 
+const { term, relatedTerms } = Astro.props;
+
 const { Content } = await render(term);
-const relatedTerms = term.data.relatedTerms
-  .map((slug: string) => {
-    const found = allTerms.find((t) => t.data.slug === slug);
-    return found ? { slug: found.data.slug, title: found.data.title } : null;
-  })
-  .filter(Boolean) as Array<{ slug: string; title: string }>;
 
 const siteUrl = 'https://devopsglossary.com';
 
@@ -42,17 +44,6 @@ const breadcrumbSchema = generateBreadcrumbSchema([
 ]);
 
 const jsonLd = [definedTermSchema, breadcrumbSchema];
-
-const pageContent = JSON.stringify({ slug: term.data.slug, title: term.data.title, description: term.data.description });
-const etag = await generateETag(pageContent);
-const ifNoneMatch = Astro.request.headers.get('If-None-Match');
-
-if (ifNoneMatch === etag) {
-  return new Response(null, { status: 304 });
-}
-
-Astro.response.headers.set('ETag', etag);
-Astro.response.headers.set('Cache-Control', 'public, max-age=3600, must-revalidate');
 ---
 
 <BaseLayout

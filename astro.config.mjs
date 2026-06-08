@@ -8,8 +8,11 @@ import vercel from "@astrojs/vercel";
 // https://astro.build/config
 export default defineConfig({
   site: "https://www.devopsglossary.com",
-  output: "server",
+  output: "static",
   trailingSlash: "never",
+  redirects: {
+    "/glossary": "/",
+  },
   adapter: vercel({
     imageService: true,
     devImageService: "sharp",
