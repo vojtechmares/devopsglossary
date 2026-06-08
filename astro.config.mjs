@@ -1,18 +1,18 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
-import react from '@astrojs/react';
-import mdx from '@astrojs/mdx';
-import tailwindcss from '@tailwindcss/vite';
-import vercel from '@astrojs/vercel';
+import {defineConfig} from "astro/config";
+import react from "@astrojs/react";
+import mdx from "@astrojs/mdx";
+import tailwindcss from "@tailwindcss/vite";
+import vercel from "@astrojs/vercel";
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://devopsglossary.com',
-  output: 'server',
-  trailingSlash: 'never',
+  site: "https://www.devopsglossary.com",
+  output: "server",
+  trailingSlash: "never",
   adapter: vercel({
     imageService: true,
-    devImageService: 'sharp',
+    devImageService: "sharp",
   }),
   integrations: [react(), mdx()],
   vite: {
